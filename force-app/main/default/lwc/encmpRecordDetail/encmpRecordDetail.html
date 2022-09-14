@@ -1,0 +1,115 @@
+<template>
+  <div class="slds-var-p-around_x-small">
+   <c-encmp-page-message if:true={pageError} onclose={handleErrorClose}>
+      <h2>
+         An error occurred loading the page. If the error continues, please
+         provide an administrator with the following details
+      </h2>
+   <div class="slds-size_1-of-1 slds-box slds-box_x-small">{pageError}</div>
+    </c-encmp-page-message>
+    <lightning-record-edit-form
+      object-api-name={objectApiName}
+      density="comfy"
+      layout-type="Full"
+      onsubmit={handleSubmit}
+      record-id={recordId}
+      onload={handleLoad}
+    >
+      <div style="position: relative; height: 4rem" if:true={loading}>
+        <div
+          class="slds-spinner_container"
+          style="position: absolute; top: 0; left: 0; height: 6rem"
+        >
+          <div
+            role="status"
+            class="slds-spinner slds-spinner_large"
+            style="top: 40x"
+          >
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        for:each={sections}
+        for:item="section"
+        key={section.id}
+        class="slds-var-m-bottom_large"
+      >
+        <h2
+          if:true={section.useHeading}
+          class="dxp-text-heading-medium slds-border_bottom slds-var-m-bottom_medium"
+        >
+          {section.heading}
+        </h2>
+
+        <div
+          for:each={section.layoutRows}
+          for:item="row"
+          key={row.id}
+          class="slds-grid slds-gutters slds-wrap slds-grid_align-space"
+        >
+          <div
+            for:each={row.layoutItems}
+            for:item="item"
+            key={item}
+            class={row.styleClass}
+          >
+            <h3 if:true={item.useHeading} class="dxp-text-heading-small">
+              {item.label}
+            </h3>
+            <div
+              for:each={item.layoutComponents}
+              for:item="cmp"
+              key={cmp.apiName}
+            >
+              <lightning-input-field
+                if:true={editMode}
+                field-name={cmp.apiName}
+                required={cmp.required}
+                disabled={item.disabledForNew}
+              ></lightning-input-field>
+              <lightning-output-field
+                if:false={editMode}
+                field-name={cmp.apiName}
+              ></lightning-output-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div if:true={editMode}>
+        <lightning-button
+          variant="brand"
+          class="slds-var-m-top_medium slds-var-m-right_medium"
+          type="submit"
+          label="Submit"
+          disabled={loading}
+          icon-name="utility:save"
+        >
+        </lightning-button>
+        <lightning-button
+          class="slds-var-m-top_medium"
+          label="Cancel"
+          disabled={loading}
+          onclick={handleCancel}
+          icon-name="utility:error"
+        >
+        </lightning-button>
+      </div>
+      <div if:true={showEdit}>
+        <lightning-button
+          variant="brand"
+          class="slds-var-m-top_medium"
+          label="Edit"
+          onclick={handleEdit}
+          disabled={loading}
+          icon-name="utility:edit"
+        >
+        </lightning-button>
+      </div>
+    </lightning-record-edit-form>
+  </div>
+</template>

@@ -1,0 +1,27 @@
+<!-- sldsValidatorIgnore -->
+<template>
+   <div class={alertClasses} role="alert" style="display: inline-block">
+     <span class="slds-assistive-text">{variant}</span>
+     <slot></slot>
+     <div
+       class="slds-notify__close"
+       style="
+         top: var(--dxp-g-spacing-small);
+         right: var(--dxp-g-spacing-xsmall);
+       "
+     >
+       <button
+         class="slds-button slds-button_icon slds-button_icon-small slds-button_icon-inverse"
+         title="Close"
+         onclick={handleClose}
+       >
+         <svg class="slds-button__icon" aria-hidden="true">
+           <use
+             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"
+           ></use>
+         </svg>
+         <span class="slds-assistive-text">Close</span>
+       </button>
+     </div>
+   </div>
+ </template>
